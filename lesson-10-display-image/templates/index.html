@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Satellite Imagery Explorer
+    </title>
+
+</head>
+
+<body>
+
+    <h1>
+        Satellite Imagery Explorer
+    </h1>
+
+
+    <form method="POST">
+
+        <label>
+            Latitude:
+        </label>
+
+        <input
+            type="text"
+            name="latitude"
+            placeholder="Enter latitude"
+            required
+        >
+
+        <br><br>
+
+
+        <label>
+            Longitude:
+        </label>
+
+        <input
+            type="text"
+            name="longitude"
+            placeholder="Enter longitude"
+            required
+        >
+
+        <br><br>
+
+
+        <button type="submit">
+            Find Satellite Image
+        </button>
+
+    </form>
+
+
+    {% if error %}
+
+        <hr>
+
+        <h2>
+            Error
+        </h2>
+
+        <p>
+            {{ error }}
+        </p>
+
+    {% endif %}
+
+
+    {% if result %}
+
+        <hr>
+
+        <h2>
+            Sentinel-2 Image
+        </h2>
+
+
+<img
+    src="{{ url_for(
+        'static',
+        filename='outputs/sentinel_enhanced.png'
+    ) }}?v={{ result.granule }}"
+    alt="Sentinel-2 satellite image"
+    width="600"
+>
+
+        <h3>
+            Observation
+        </h3>
+
+        <p>
+            {{ result.observation }}
+        </p>
+
+
+        <h3>
+            Scene
+        </h3>
+
+        <p>
+            {{ result.granule }}
+        </p>
+
+
+        <h3>
+            Location
+        </h3>
+
+        <p>
+            Latitude: {{ result.latitude }}
+
+            <br>
+
+            Longitude: {{ result.longitude }}
+        </p>
+
+    {% endif %}
+
+
+</body>
+
+</html>

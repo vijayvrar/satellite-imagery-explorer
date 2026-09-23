@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Satellite Imagery Explorer</title>
+
+</head>
+
+<body>
+
+    <h1>
+        Satellite Imagery Explorer
+    </h1>
+
+    {% if result %}
+
+        <h2>
+            Sentinel-2 Image
+        </h2>
+
+        <img
+            src="{{ result.image }}"
+            alt="Sentinel-2 satellite image"
+            width="600"
+        >
+
+        <h3>
+            Observation
+        </h3>
+
+        <p>
+            {{ result.observation }}
+        </p>
+
+        <h3>
+            Scene
+        </h3>
+
+        <p>
+            {{ result.granule }}
+        </p>
+
+        <h3>
+            Location
+        </h3>
+
+        <p>
+            Latitude: {{ result.latitude }}
+            <br>
+            Longitude: {{ result.longitude }}
+        </p>
+
+    {% endif %}
+
+</body>
+
+</html>

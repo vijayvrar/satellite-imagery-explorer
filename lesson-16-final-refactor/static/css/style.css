@@ -1,0 +1,386 @@
+* {
+    box-sizing: border-box;
+}
+
+
+body {
+    margin: 0;
+
+    font-family:
+        Arial,
+        sans-serif;
+
+    background: #f4f6f8;
+
+    color: #1f2937;
+}
+
+
+.container {
+    width: 90%;
+    max-width: 1100px;
+
+    margin: 0 auto;
+}
+
+
+/* --------------------------------
+   Header
+-------------------------------- */
+
+.header {
+    background: #111827;
+
+    color: white;
+
+    padding: 30px 0;
+
+    text-align: center;
+}
+
+
+.header h1 {
+    margin: 0;
+
+    font-size: 32px;
+}
+
+
+.header p {
+    margin-top: 10px;
+
+    color: #d1d5db;
+}
+
+
+/* --------------------------------
+   Search Section
+-------------------------------- */
+
+.search-card {
+    background: white;
+
+    margin-top: 30px;
+
+    padding: 25px;
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 4px 15px
+        rgba(0, 0, 0, 0.08);
+}
+
+
+.search-card h2 {
+    margin-top: 0;
+}
+
+
+.form-grid {
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr auto;
+
+    gap: 15px;
+
+    align-items: end;
+}
+
+
+.form-group label {
+    display: block;
+
+    margin-bottom: 6px;
+
+    font-weight: bold;
+}
+
+
+.form-group input {
+    width: 100%;
+
+    padding: 11px;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 6px;
+
+    font-size: 15px;
+}
+
+
+button {
+    padding: 11px 20px;
+
+    border: none;
+
+    border-radius: 6px;
+
+    background: #2563eb;
+
+    color: white;
+
+    font-size: 15px;
+
+    cursor: pointer;
+}
+
+
+button:hover {
+    background: #1d4ed8;
+}
+
+
+/* --------------------------------
+   Error
+-------------------------------- */
+
+.error {
+    margin-top: 20px;
+
+    padding: 12px;
+
+    background: #fee2e2;
+
+    color: #991b1b;
+
+    border-radius: 6px;
+}
+
+
+/* --------------------------------
+   Comparison
+-------------------------------- */
+
+.comparison-section {
+    margin-top: 35px;
+
+    background: white;
+
+    padding: 25px;
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 4px 15px
+        rgba(0, 0, 0, 0.08);
+}
+
+
+.comparison-section h2 {
+    margin-top: 0;
+
+    text-align: center;
+}
+
+
+.comparison-container {
+    position: relative;
+
+    width: 800px;
+
+    max-width: 100%;
+
+    aspect-ratio: 1 / 1;
+
+    margin: 20px auto;
+
+    overflow: hidden;
+
+    border-radius: 8px;
+}
+
+
+.comparison-image {
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+}
+
+
+.before-container {
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 50%;
+    height: 100%;
+
+    overflow: hidden;
+}
+
+
+.before-container .comparison-image {
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    max-width: none;
+
+    object-fit: cover;
+}
+
+
+.slider-line {
+    position: absolute;
+
+    top: 0;
+    bottom: 0;
+
+    left: 50%;
+
+    width: 3px;
+
+    background: white;
+
+    pointer-events: none;
+}
+
+
+.comparison-slider {
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    margin: 0;
+
+    opacity: 0;
+
+    cursor: ew-resize;
+}
+
+
+.year-label {
+    position: absolute;
+
+    top: 15px;
+
+    padding: 7px 12px;
+
+    background:
+        rgba(0, 0, 0, 0.65);
+
+    color: white;
+
+    font-weight: bold;
+
+    border-radius: 5px;
+}
+
+
+.before-label {
+    left: 15px;
+}
+
+
+.after-label {
+    right: 15px;
+}
+
+
+/* --------------------------------
+   Metadata
+-------------------------------- */
+
+.metadata-grid {
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 20px;
+
+    margin-top: 25px;
+}
+
+
+.metadata-card {
+    padding: 20px;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 10px;
+
+    background: #fafafa;
+}
+
+
+.metadata-card h3 {
+    margin-top: 0;
+
+    font-size: 20px;
+}
+
+
+.metadata-card p {
+    margin: 8px 0;
+
+    font-size: 14px;
+}
+
+
+.metadata-label {
+    font-weight: bold;
+}
+
+
+/* --------------------------------
+   Footer
+-------------------------------- */
+
+.footer {
+    text-align: center;
+
+    padding: 30px 0;
+
+    color: #6b7280;
+
+    font-size: 14px;
+}
+
+
+/* --------------------------------
+   Mobile
+-------------------------------- */
+
+@media (max-width: 700px) {
+
+    .container {
+        width: 94%;
+    }
+
+
+    .header h1 {
+        font-size: 25px;
+    }
+
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    .metadata-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    .comparison-container {
+        width: 100%;
+    }
+
+}

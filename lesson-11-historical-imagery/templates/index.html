@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <title>
+        Historical Satellite Imagery
+    </title>
+</head>
+
+<body>
+
+    <h1>
+        Historical Sentinel-2 Imagery
+    </h1>
+
+    <form method="POST">
+
+        <label>
+            Latitude:
+        </label>
+
+        <input
+            type="text"
+            name="latitude"
+            placeholder="13.0827"
+            required
+        >
+
+        <br><br>
+
+        <label>
+            Longitude:
+        </label>
+
+        <input
+            type="text"
+            name="longitude"
+            placeholder="80.2707"
+            required
+        >
+
+        <br><br>
+
+        <button type="submit">
+            Search Historical Imagery
+        </button>
+
+    </form>
+
+
+    {% if error %}
+
+        <p>
+            Error: {{ error }}
+        </p>
+
+    {% endif %}
+
+
+    {% if historical %}
+
+        <h2>
+            Historical Images Found
+        </h2>
+
+
+        <h3>
+            2018
+        </h3>
+
+        <p>
+            Scene:
+            {{ historical["2018"].id }}
+        </p>
+
+        <p>
+            Date:
+            {{ historical["2018"].properties.get("datetime") }}
+        </p>
+
+        <p>
+            Cloud Cover:
+            {{ historical["2018"].properties.get("eo:cloud_cover") }}
+        </p>
+
+
+        <h3>
+            2026
+        </h3>
+
+        <p>
+            Scene:
+            {{ historical["2026"].id }}
+        </p>
+
+        <p>
+            Date:
+            {{ historical["2026"].properties.get("datetime") }}
+        </p>
+
+        <p>
+            Cloud Cover:
+            {{ historical["2026"].properties.get("eo:cloud_cover") }}
+        </p>
+
+    {% endif %}
+
+</body>
+
+</html>

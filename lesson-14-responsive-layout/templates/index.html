@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Satellite Change Comparison
+    </title>
+
+
+    <style>
+
+        /* ------------------------------
+           Basic Page Styling
+        ------------------------------ */
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+
+        h2 {
+            margin-top: 30px;
+        }
+
+
+        input {
+            padding: 8px;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+
+        button {
+            padding: 10px 16px;
+            cursor: pointer;
+        }
+
+
+        /* ------------------------------
+           Comparison Container
+        ------------------------------ */
+
+        .comparison-container {
+            position: relative;
+
+            width: 800px;
+            max-width: 100%;
+
+            aspect-ratio: 1 / 1;
+
+            overflow: hidden;
+        }
+
+
+        /* ------------------------------
+           Satellite Images
+        ------------------------------ */
+
+        .comparison-image {
+            position: absolute;
+
+            top: 0;
+            left: 0;
+
+            width: 100%;
+            height: 100%;
+
+            object-fit: cover;
+        }
+
+
+        /* ------------------------------
+           2018 Image Container
+        ------------------------------ */
+
+        .before-container {
+            position: absolute;
+
+            top: 0;
+            left: 0;
+
+            width: 50%;
+            height: 100%;
+
+            overflow: hidden;
+        }
+
+
+        .before-container .comparison-image {
+            position: absolute;
+
+            top: 0;
+            left: 0;
+
+            width: 800px;
+            height: 800px;
+
+            max-width: none;
+
+            object-fit: cover;
+        }
+
+
+        /* ------------------------------
+           Slider Divider
+        ------------------------------ */
+
+        .slider-line {
+            position: absolute;
+
+            top: 0;
+            bottom: 0;
+
+            left: 50%;
+
+            width: 3px;
+
+            background: white;
+
+            pointer-events: none;
+        }
+
+
+        /* ------------------------------
+           Invisible Range Slider
+        ------------------------------ */
+
+        .comparison-slider {
+            position: absolute;
+
+            top: 0;
+            left: 0;
+
+            width: 100%;
+            height: 100%;
+
+            margin: 0;
+
+            opacity: 0;
+
+            cursor: ew-resize;
+        }
+
+
+        /* ------------------------------
+           Year Labels
+        ------------------------------ */
+
+        .year-label {
+            position: absolute;
+
+            top: 15px;
+
+            padding: 6px 10px;
+
+            background: rgba(0, 0, 0, 0.6);
+
+            color: white;
+
+            font-weight: bold;
+        }
+
+
+        .before-label {
+            left: 15px;
+        }
+
+
+        .after-label {
+            right: 15px;
+        }
+
+
+        /* ------------------------------
+           Mobile Responsive Layout
+        ------------------------------ */
+
+        @media (max-width: 600px) {
+
+            body {
+                margin: 10px;
+            }
+
+
+            h1 {
+                font-size: 24px;
+            }
+
+
+            h2 {
+                font-size: 20px;
+            }
+
+
+            .comparison-container {
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <h1>
+        Satellite Change Comparison
+    </h1>
+
+
+    <!-- Coordinate Form -->
+
+    <form method="POST">
+
+        <label>
+            Latitude:
+        </label>
+
+        <input
+            type="text"
+            name="latitude"
+            placeholder="13.0827"
+            required
+        >
+
+        <br><br>
+
+
+        <label>
+            Longitude:
+        </label>
+
+        <input
+            type="text"
+            name="longitude"
+            placeholder="80.2707"
+            required
+        >
+
+        <br><br>
+
+
+        <button type="submit">
+            Generate Comparison
+        </button>
+
+    </form>
+
+
+    <!-- Error Message -->
+
+    {% if error %}
+
+        <p>
+            Error: {{ error }}
+        </p>
+
+    {% endif %}
+
+
+    <!-- Historical Comparison -->
+
+    {% if historical %}
+
+        <h2>
+            2018 vs 2026
+        </h2>
+
+
+        <div
+            class="comparison-container"
+        >
+
+            <!-- 2026 Image -->
+
+            <img
+                src="{{ url_for(
+                    'static',
+                    filename='outputs/sentinel_2026.png'
+                ) }}"
+                class="comparison-image"
+                alt="Sentinel-2 satellite imagery from 2026"
+            >
+
+
+            <!-- 2018 Image -->
+
+            <div
+                class="before-container"
+                id="beforeContainer"
+            >
+
+                <img
+                    src="{{ url_for(
+                        'static',
+                        filename='outputs/sentinel_2018.png'
+                    ) }}"
+                    class="comparison-image"
+                    alt="Sentinel-2 satellite imagery from 2018"
+                >
+
+            </div>
+
+
+            <!-- 2018 Label -->
+
+            <div
+                class="year-label before-label"
+            >
+                2018
+            </div>
+
+
+            <!-- 2026 Label -->
+
+            <div
+                class="year-label after-label"
+            >
+                2026
+            </div>
+
+
+            <!-- Slider Divider -->
+
+            <div
+                class="slider-line"
+                id="sliderLine"
+            ></div>
+
+
+            <!-- Invisible Slider -->
+
+            <input
+                type="range"
+                min="0"
+                max="100"
+                value="50"
+                id="comparisonSlider"
+                class="comparison-slider"
+                aria-label="Compare 2018 and 2026 satellite imagery"
+            >
+
+        </div>
+
+    {% endif %}
+
+
+    <!-- Comparison JavaScript -->
+
+    <script>
+
+        const slider =
+            document.getElementById(
+                "comparisonSlider"
+            );
+
+
+        const beforeContainer =
+            document.getElementById(
+                "beforeContainer"
+            );
+
+
+        const beforeImage =
+            beforeContainer
+                ? beforeContainer.querySelector(
+                    ".comparison-image"
+                )
+                : null;
+
+
+        const comparisonContainer =
+            document.querySelector(
+                ".comparison-container"
+            );
+
+
+        const sliderLine =
+            document.getElementById(
+                "sliderLine"
+            );
+
+
+        function resizeBeforeImage() {
+
+            if (
+                !comparisonContainer ||
+                !beforeImage
+            ) {
+                return;
+            }
+
+
+            const containerWidth =
+                comparisonContainer.clientWidth;
+
+
+            const containerHeight =
+                comparisonContainer.clientHeight;
+
+
+            beforeImage.style.width =
+                containerWidth + "px";
+
+
+            beforeImage.style.height =
+                containerHeight + "px";
+        }
+
+
+        function updateComparison() {
+
+            if (
+                !slider ||
+                !beforeContainer ||
+                !sliderLine
+            ) {
+                return;
+            }
+
+
+            const value =
+                slider.value;
+
+
+            beforeContainer.style.width =
+                value + "%";
+
+
+            sliderLine.style.left =
+                value + "%";
+
+
+            resizeBeforeImage();
+        }
+
+
+        if (slider) {
+
+            slider.addEventListener(
+                "input",
+                updateComparison
+            );
+
+        }
+
+
+        window.addEventListener(
+            "resize",
+            resizeBeforeImage
+        );
+
+
+        resizeBeforeImage();
+
+        updateComparison();
+
+    </script>
+
+
+</body>
+
+</html>

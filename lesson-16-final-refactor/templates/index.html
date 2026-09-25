@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Satellite Imagery Explorer
+    </title>
+
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for(
+            'static',
+            filename='css/style.css'
+        ) }}"
+    >
+
+</head>
+
+
+<body>
+
+
+    <!-- Header -->
+
+    <header class="header">
+
+        <div class="container">
+
+            <h1>
+                Satellite Imagery Explorer
+            </h1>
+
+            <p>
+                Explore historical Sentinel-2 imagery
+            </p>
+
+        </div>
+
+    </header>
+
+
+
+    <main class="container">
+
+
+        <!-- Search -->
+
+        <section class="search-card">
+
+            <h2>
+                Explore a Location
+            </h2>
+
+
+            <form method="POST">
+
+                <div class="form-grid">
+
+
+                    <div class="form-group">
+
+                        <label for="latitude">
+                            Latitude
+                        </label>
+
+                        <input
+                            type="text"
+                            id="latitude"
+                            name="latitude"
+                            placeholder="13.0827"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <div class="form-group">
+
+                        <label for="longitude">
+                            Longitude
+                        </label>
+
+                        <input
+                            type="text"
+                            id="longitude"
+                            name="longitude"
+                            placeholder="80.2707"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <button type="submit">
+                        Explore
+                    </button>
+
+                </div>
+
+            </form>
+
+
+            {% if error %}
+
+                <div class="error">
+
+                    {{ error }}
+
+                </div>
+
+            {% endif %}
+
+        </section>
+
+
+
+        {% if historical %}
+
+
+        <!-- Comparison -->
+
+        <section class="comparison-section">
+
+            <h2>
+                Historical Comparison
+            </h2>
+
+
+            <div class="comparison-container">
+
+
+                <!-- 2026 -->
+
+                <img
+                    src="{{ url_for(
+                        'static',
+                        filename='outputs/sentinel_2026.png'
+                    ) }}"
+                    class="comparison-image"
+                    alt="Sentinel-2 imagery from 2026"
+                >
+
+
+                <!-- 2018 -->
+
+                <div
+                    class="before-container"
+                    id="beforeContainer"
+                >
+
+                    <img
+                        src="{{ url_for(
+                            'static',
+                            filename='outputs/sentinel_2018.png'
+                        ) }}"
+                        class="comparison-image"
+                        alt="Sentinel-2 imagery from 2018"
+                    >
+
+                </div>
+
+
+                <!-- Labels -->
+
+                <div
+                    class="year-label before-label"
+                >
+                    2018
+                </div>
+
+
+                <div
+                    class="year-label after-label"
+                >
+                    2026
+                </div>
+
+
+                <!-- Slider -->
+
+                <div
+                    class="slider-line"
+                    id="sliderLine"
+                ></div>
+
+
+                <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="50"
+                    id="comparisonSlider"
+                    class="comparison-slider"
+                    aria-label="Compare 2018 and 2026 satellite imagery"
+                >
+
+            </div>
+
+        </section>
+
+
+
+        <!-- Metadata -->
+
+        <section class="comparison-section">
+
+            <h2>
+                Satellite Metadata
+            </h2>
+
+
+            <div class="metadata-grid">
+
+
+                <!-- 2018 -->
+
+                <div class="metadata-card">
+
+                    <h3>
+                        2018
+                    </h3>
+
+
+                    <p>
+
+                        <span class="metadata-label">
+                            Scene:
+                        </span>
+
+                        {{ historical["2018"].scene }}
+
+                    </p>
+
+
+                    <p>
+
+                        <span class="metadata-label">
+                            Date:
+                        </span>
+
+                        {{ historical["2018"].date }}
+
+                    </p>
+
+
+                    <p>
+
+                        <span class="metadata-label">
+                            Cloud Cover:
+                        </span>
+
+                        {{ "%.2f"|format(
+                            historical["2018"].cloud_cover
+                        ) }}%
+
+                    </p>
+
+                </div>
+
+
+
+                <!-- 2026 -->
+
+                <div class="metadata-card">
+
+                    <h3>
+                        2026
+                    </h3>
+
+
+                    <p>
+
+                        <span class="metadata-label">
+                            Scene:
+                        </span>
+
+                        {{ historical["2026"].scene }}
+
+                    </p>
+
+
+                    <p>
+
+                        <span class="metadata-label">
+                            Date:
+                        </span>
+
+                        {{ historical["2026"].date }}
+
+                    </p>
+
+
+                    <p>
+
+                        <span class="metadata-label">
+                            Cloud Cover:
+                        </span>
+
+                        {{ "%.2f"|format(
+                            historical["2026"].cloud_cover
+                        ) }}%
+
+                    </p>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+        {% endif %}
+
+
+    </main>
+
+
+
+    <!-- Footer -->
+
+    <footer class="footer">
+
+        <div class="container">
+
+            Sentinel-2 Historical Imagery Explorer
+
+        </div>
+
+    </footer>
+
+
+
+    <!-- Comparison JavaScript -->
+
+    <script>
+
+        const slider =
+            document.getElementById(
+                "comparisonSlider"
+            );
+
+
+        const beforeContainer =
+            document.getElementById(
+                "beforeContainer"
+            );
+
+
+        const beforeImage =
+            beforeContainer
+                ? beforeContainer.querySelector(
+                    ".comparison-image"
+                )
+                : null;
+
+
+        const comparisonContainer =
+            document.querySelector(
+                ".comparison-container"
+            );
+
+
+        const sliderLine =
+            document.getElementById(
+                "sliderLine"
+            );
+
+
+        function resizeBeforeImage() {
+
+            if (
+                !comparisonContainer ||
+                !beforeImage
+            ) {
+                return;
+            }
+
+
+            const containerWidth =
+                comparisonContainer.clientWidth;
+
+
+            const containerHeight =
+                comparisonContainer.clientHeight;
+
+
+            beforeImage.style.width =
+                containerWidth + "px";
+
+
+            beforeImage.style.height =
+                containerHeight + "px";
+
+        }
+
+
+        function updateComparison() {
+
+            if (
+                !slider ||
+                !beforeContainer ||
+                !sliderLine
+            ) {
+                return;
+            }
+
+
+            const value =
+                slider.value;
+
+
+            beforeContainer.style.width =
+                value + "%";
+
+
+            sliderLine.style.left =
+                value + "%";
+
+
+            resizeBeforeImage();
+
+        }
+
+
+        if (slider) {
+
+            slider.addEventListener(
+                "input",
+                updateComparison
+            );
+
+        }
+
+
+        window.addEventListener(
+            "resize",
+            resizeBeforeImage
+        );
+
+
+        resizeBeforeImage();
+
+        updateComparison();
+
+    </script>
+
+
+</body>
+
+</html>
